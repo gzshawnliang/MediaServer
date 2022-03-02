@@ -1,0 +1,33 @@
+﻿@page
+@model PrivacyModel
+@{
+    ViewData["Title"] = "Admin";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div class="list-group">
+    @foreach(MediaStream mediaStream in Model.VideoStreamList)
+    {
+        Uri uri = new Uri(mediaStream.StreamURL);
+
+        <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1"><i class="fa fa-video-camera" aria-hidden="true"></i> @mediaStream.StreamId</h5>
+                <span>
+                    @if(mediaStream.Stop==1)
+                    {
+                        <i class="fa fa-exclamation-circle" aria-hidden="true" style="color:red;"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-check-circle" aria-hidden="true" style="color:green;"></i>
+                    }
+
+                </span>
+            </div>
+            <p class="mb-1">  @($"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}") </p>
+            <small> ffmpeg.exe - @mediaStream.ProcessId </small>
+        </a>        
+    }
+</div>
+

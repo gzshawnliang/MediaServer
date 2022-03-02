@@ -363,5 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # hls Files
-*.ts
-*.m3u8
+hls/**/*.ts
+hls/**/*.m3u8

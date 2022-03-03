@@ -1,0 +1,37 @@
+﻿@page
+@model MediaServer.Pages.MediaStreamEditModel
+@{
+
+}
+<form method="POST">
+    <input asp-for="MediaStream.StreamId"  type="hidden"/>
+
+    <div class="mb-3">
+      <label for="Title" class="form-label">名称</label>
+      <input type="text" asp-for="MediaStream.Title" class="form-control" placeholder="房间">
+    </div>
+
+    <div class="mb-3">
+      <label for="StreamURL" class="form-label">Stream URL 地址</label>
+      <input type="text" asp-for="MediaStream.StreamURL"  class="form-control" placeholder="rtsp://admin:KTTHVE@192.168.137.239:554/h265/ch1/main/av_stream">
+    </div>
+    <div class="mb-3">
+      <label for="FFmpegArg" class="form-label">FFmpeg 参数</label>
+      <input type="text" asp-for="MediaStream.FFmpegArg" class="form-control" placeholder="-i {input} -fflags flush_packets -max_delay 2 -hls_flags delete_segments -hls_time 2 -g 30 {output}">
+    </div>
+
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" asp-for="MediaStream.Stop" type="radio" id="Stop0" value="0" checked>
+      <label class="form-check-label" for="Stop0">启用</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" asp-for="MediaStream.Stop" type="radio" id="Stop1" value="1">
+      <label class="form-check-label" for="Stop1">停用</label>
+    </div>
+
+    <br />
+    <br />
+
+    <button type="submit" class="btn btn-primary">保存</button>
+    <button type="button" class="btn btn-secondary">测试</button>
+</form>

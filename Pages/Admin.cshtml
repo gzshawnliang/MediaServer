@@ -10,9 +10,19 @@
     {
         Uri uri = new Uri(mediaStream.StreamURL);
 
-        <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+        <a asp-page="./MediaStreamEdit" asp-route-id="@mediaStream.StreamId" class="list-group-item list-group-item-action" aria-current="true">
             <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1"><i class="fa fa-video-camera" aria-hidden="true"></i> @mediaStream.StreamId</h5>
+                <h5 class="mb-1">
+                    <i class="fa fa-video-camera" aria-hidden="true"></i> 
+                    @if(string.IsNullOrEmpty(mediaStream.Title))
+                    {
+                        <span>@mediaStream.StreamId</span>
+                    }
+                    else
+                    {
+                        <span>@mediaStream.Title </span>
+                    }
+                </h5>
                 <span>
                     @if(mediaStream.Stop==1)
                     {
@@ -25,9 +35,19 @@
 
                 </span>
             </div>
-            <p class="mb-1">  @($"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}") </p>
-            <small> ffmpeg.exe - @mediaStream.ProcessId </small>
+            <p class="mb-1 text-break">  @($"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}") </p>
+            <div class="d-flex w-100 justify-content-between">
+                <small> ffmpeg.exe - @mediaStream.ProcessId </small>
+                <small>@mediaStream.StreamId </small>
+            </div>
+            
         </a>        
     }
 </div>
 
+<br/>
+<div class="d-grid gap-2">
+    <a asp-page="./MediaStreamEdit" class="btn btn-primary">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> 增加
+    </a>
+</div>

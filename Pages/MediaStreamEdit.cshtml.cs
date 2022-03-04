@@ -10,15 +10,28 @@ namespace MediaServer.Pages
         [BindProperty]
         public MediaStream MediaStream { get; set; }
 
-        public void OnGet(string id)
+        private readonly ILogger<IndexModel> _logger;
+        private readonly IWebHostEnvironment _env;
+
+        public MediaStreamEditModel(ILogger<IndexModel> logger, IWebHostEnvironment env)
         {
-            System.Diagnostics.Debug.WriteLine(id);
-            if (!string.IsNullOrEmpty(id))
+            _env = env;
+            _logger = logger;
+        }
+
+        public void OnGet(string streamId)
+        {
+            System.Diagnostics.Debug.WriteLine(streamId);
+            if (!string.IsNullOrEmpty(streamId))
             {
                 using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
                 {
-                    MediaStream = connection.QueryFirst<MediaStream>($"SELECT * FROM MediaStream WHERE StreamId='{id}';");
+                    MediaStream = connection.QueryFirst<MediaStream>($"SELECT * FROM MediaStream WHERE StreamId='{streamId}';");
                 }
+            }
+            else
+            {
+                MediaStream = new MediaStream();
             }
         }
 
@@ -33,10 +46,12 @@ namespace MediaServer.Pages
              */
             ;
             string sql = string.Empty;
-            if (string.IsNullOrEmpty(MediaStream.StreamId))
+            string currStreamId = MediaStream.StreamId;
+            if (string.IsNullOrEmpty(currStreamId))
             {
+                currStreamId = Guid.NewGuid().ToString().Split("-").First();
                 sql += $"INSERT INTO MediaStream (StreamId, StreamType, StreamURL, Stop, CreateDateTime, FFmpegArg, Title, ProcessId)";
-                sql += $"VALUES ('{Guid.NewGuid().ToString().Split("-").First()}', 'RTPS', '{MediaStream.StreamURL}', {MediaStream.Stop}, {DateTime.Now.ToString("yyyyMMddHHmmss")},";
+                sql += $"VALUES ('{currStreamId}', 'RTPS', '{MediaStream.StreamURL}', {MediaStream.Stop}, {DateTime.Now.ToString("yyyyMMddHHmmss")},";
                 sql += $"'{MediaStream.FFmpegArg}', '{MediaStream.Title}',";
                 sql += $"null);";
             }
@@ -49,15 +64,27 @@ namespace MediaServer.Pages
                 sql += $"       FFmpegArg='{MediaStream.FFmpegArg}',\n";
                 sql += $"       Title='{MediaStream.Title}',\n";
                 sql += $"       CreateDateTime={DateTime.Now.ToString("yyyyMMddHHmmss")}\n";
-                sql += $"WHERE  StreamId = '{MediaStream.StreamId}'";
+                sql += $"WHERE  StreamId = '{currStreamId}'";
             }
             int result = 0;
             using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
             {
                 result = connection.Execute(sql);
             }
-            if(result>0)
-                return Redirect("Admin");
+            if (result > 0)
+            {
+                MediaStreamManager mediaStreamManager = new MediaStreamManager(_env);
+                if (MediaStream.Stop==0)
+                {
+                    mediaStreamManager.Start(currStreamId);
+                }
+                else
+                {
+                    mediaStreamManager.Stop(currStreamId);
+                }
+                return Page();
+                //return Redirect("Admin");
+            }
 
             return null;
         }

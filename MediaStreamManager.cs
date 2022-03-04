@@ -12,7 +12,12 @@ namespace MediaServer
             _env = env;
         }
 
-        private string M3u8File(string streamId)
+        private string M3u8FileTest(string streamId)
+        {
+            return $"{_env.ContentRootPath}{Global.M3u8FileDir}\\{streamId}_Test\\index.m3u8";
+        }
+
+        public string M3u8File(string streamId)
         {
             return $"{_env.ContentRootPath}{Global.M3u8FileDir}\\{streamId}\\index.m3u8";
         }
@@ -52,16 +57,48 @@ namespace MediaServer
             }
             return false;
         }
-
-        public bool Start(string streamId)
+        public MediaStream GetMediaStream(string streamId)
         {
             MediaStream mediaStream = null;
             using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
             {
                 connection.Open();
-                mediaStream = connection.QueryFirst<MediaStream>($"SELECT * FROM MediaStream WHERE StreamId='{streamId}' AND Stop=0;");
+                mediaStream = connection.QueryFirst<MediaStream>($"SELECT * FROM MediaStream WHERE StreamId='{streamId}';");
                 System.Diagnostics.Debug.WriteLine($"{mediaStream.StreamId}");
             }
+            return mediaStream;
+        }
+
+        public bool Stop(string streamId)
+        {
+            MediaStream mediaStream = GetMediaStream(streamId);
+            if (mediaStream == null)
+                return false;
+            int processId = mediaStream.ProcessId ?? 0;
+            string m3u8Dir = $"{_env.ContentRootPath}{Global.M3u8FileDir}\\{mediaStream.StreamId}";
+            string m3u8File = M3u8File(mediaStream.StreamId);
+
+            mediaStream.FFmpegArg = mediaStream.FFmpegArg.Replace("{input}", mediaStream.StreamURL);
+            mediaStream.FFmpegArg = mediaStream.FFmpegArg.Replace("{output}", m3u8File);
+            var ffmpeg = new FFmpeg();
+            if (processId > 0)
+            {
+                ffmpeg.StopConversion(processId);
+                if (Directory.Exists(m3u8Dir))
+                {
+                    Directory.Delete(m3u8Dir, true);
+                }
+                using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
+                {
+                    connection.Open();
+                    connection.Execute($"UPDATE MediaStream SET ProcessId = NULL WHERE StreamId = '{mediaStream.StreamId}';");
+                }
+            }
+            return true;
+        }
+        public bool Start(string streamId)
+        {
+            MediaStream mediaStream = GetMediaStream(streamId);
             if (mediaStream == null)
                 return false;
 
@@ -94,6 +131,51 @@ namespace MediaServer
                     connection.Open();
                     connection.Execute($"UPDATE MediaStream SET ProcessId ={processId} WHERE StreamId = '{mediaStream.StreamId}';");
                 }
+                while (!System.IO.File.Exists(m3u8File))
+                {
+                    Thread.Sleep(100);
+                    continue;
+                }
+                return true;
+            }
+            return false;
+
+        }
+
+        public bool Test(MediaStream mediaStream)
+        {
+            if (mediaStream == null)
+                return false;
+
+            int processId = mediaStream.ProcessId ?? 0;
+
+            string m3u8Dir = $"{_env.ContentRootPath}{Global.M3u8FileDir}\\{mediaStream.StreamId}_Test";
+            string m3u8File = M3u8FileTest(mediaStream.StreamId);
+
+            mediaStream.FFmpegArg = mediaStream.FFmpegArg.Replace("{input}", mediaStream.StreamURL);
+            mediaStream.FFmpegArg = mediaStream.FFmpegArg.Replace("{output}", m3u8File);
+            var ffmpeg = new FFmpeg();
+            if (processId > 0)
+            {
+                ffmpeg.StopConversion(processId);
+                if (Directory.Exists(m3u8Dir))
+                {
+                    Directory.Delete(m3u8Dir, true);
+                }
+            }
+            if (!Directory.Exists(m3u8Dir))
+            {
+                Directory.CreateDirectory(m3u8Dir);
+            }
+            processId = ffmpeg.StartConversion(mediaStream.FFmpegArg);
+
+            if (processId > 0)
+            {
+                //using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
+                //{
+                //    connection.Open();
+                //    connection.Execute($"UPDATE MediaStream SET ProcessId ={processId} WHERE StreamId = '{mediaStream.StreamId}';");
+                //}
                 while (!System.IO.File.Exists(m3u8File))
                 {
                     Thread.Sleep(100);

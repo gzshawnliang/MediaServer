@@ -10,10 +10,11 @@
     {
         Uri uri = new Uri(mediaStream.StreamURL);
 
-        <a asp-page="./MediaStreamEdit" asp-route-id="@mediaStream.StreamId" class="list-group-item list-group-item-action" aria-current="true">
+        <a asp-page="./MediaStreamEdit" asp-route-streamId="@mediaStream.StreamId" class="list-group-item list-group-item-action" aria-current="true">
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">
-                    <i class="fa fa-video-camera" aria-hidden="true"></i> 
+                    <i class="fa fa-video-camera" aria-hidden="true" style="color:@(mediaStream.Stop==1?"red":"green");" ></i> 
+
                     @if(string.IsNullOrEmpty(mediaStream.Title))
                     {
                         <span>@mediaStream.StreamId</span>
@@ -47,7 +48,7 @@
 
 <br/>
 <div class="d-grid gap-2">
-    <a asp-page="./MediaStreamEdit" class="btn btn-primary">
+    <a asp-page="./MediaStreamEdit" class="btn btn-primary btn-lg">
         <i class="fa fa-plus-circle" aria-hidden="true"></i> 增加
     </a>
 </div>

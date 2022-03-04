@@ -8,17 +8,23 @@
 @foreach(Tuple<string,string> videoStream in Model.VideoStreamList)
 {
     <div class="card" style="margin-bottom:8px">
-        <div class="card-header">@videoStream.Item2</div>
-            <video  id="@videoStream.Item1"
-                    class="card-img" 
-                    style="width:100%;height:auto"
-                    muted
-                    controls="controls" autoplay="autoplay"
-                    x-webkit-airplay="true" x5-video-player-fullscreen="true"
-                    preload="auto" playsinline="true" webkit-playsinline
-                    x5-video-player-typ="h5">
-                @*<source type="application/x-mpegURL" src="hls/test1.m3u8">*@
-            </video>        
+        <div class="card-header">
+            <div class="d-flex w-100 justify-content-between">
+                <span>@videoStream.Item2</span>
+                <button id="refresh-@videoStream.Item1" type="button" class="btn btn-link btn-sm"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+            </div>
+            
+            </div>
+        <video  id="@videoStream.Item1"
+                class="card-img" 
+                style="width:100%;height:auto"
+                muted
+                controls="controls" autoplay="autoplay"
+                x-webkit-airplay="true" x5-video-player-fullscreen="true"
+                preload="auto" playsinline="true" webkit-playsinline
+                x5-video-player-typ="h5">
+            @*<source type="application/x-mpegURL" src="hls/test1.m3u8">*@
+        </video>        
     </div>
 }
 
@@ -26,6 +32,27 @@
 
 
 <script>
+
+    function addVideoSrc(video,videoSrc)
+    {
+        //var video = document.getElementById("video1");
+        //
+        // First check for native browser HLS support
+        //
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+        //
+        // If no native HLS support, check if HLS.js is supported
+        //
+        } else if (Hls.isSupported()) {
+            var hls = new Hls();
+            video.muted = true;
+            //video.autoplay = false;
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+        }
+    };
+
     var ids = [];
     @foreach (var videoStream in Model.VideoStreamList)
     {
@@ -36,21 +63,12 @@
       console.log(item, index);
       var video = document.getElementById(item);
       var videoSrc = '@Model.M3u8FileDir/'+ item + '/index.m3u8';
-      //
-      // First check for native browser HLS support
-      //
-      if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = videoSrc;
-        //
-        // If no native HLS support, check if HLS.js is supported
-        //
-      } else if (Hls.isSupported()) {
-        var hls = new Hls();
-        video.muted = true;
-        //video.autoplay = false;
-        hls.loadSource(videoSrc);
-        hls.attachMedia(video);
-      }
+      addVideoSrc(video,videoSrc);
+
+        var refreshButton = document.getElementById('refresh-'+item);
+        refreshButton.onclick = function() {
+            addVideoSrc(video,videoSrc);
+        };
     });
 </script>
 

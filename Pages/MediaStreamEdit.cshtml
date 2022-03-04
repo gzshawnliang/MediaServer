@@ -1,37 +1,163 @@
 ﻿@page
 @model MediaServer.Pages.MediaStreamEditModel
 @{
-
+    bool isAdd = string.IsNullOrEmpty(this.Model.MediaStream.StreamId);
+    bool canPreviewVideo = !isAdd && this.Model.MediaStream.Stop==0;
 }
 <form method="POST">
     <input asp-for="MediaStream.StreamId"  type="hidden"/>
 
     <div class="mb-3">
       <label for="Title" class="form-label">名称</label>
-      <input type="text" asp-for="MediaStream.Title" class="form-control" placeholder="房间">
+      <input type="text" asp-for="MediaStream.Title" class="form-control" placeholder="房间" disabled="@(!isAdd)">
     </div>
 
     <div class="mb-3">
       <label for="StreamURL" class="form-label">Stream URL 地址</label>
-      <input type="text" asp-for="MediaStream.StreamURL"  class="form-control" placeholder="rtsp://admin:KTTHVE@192.168.137.239:554/h265/ch1/main/av_stream">
+      <input type="text" asp-for="MediaStream.StreamURL"  class="form-control" placeholder="rtsp://admin:KTTHVE@192.168.137.239:554/h265/ch1/main/av_stream" disabled="@(!isAdd)">
     </div>
     <div class="mb-3">
       <label for="FFmpegArg" class="form-label">FFmpeg 参数</label>
-      <input type="text" asp-for="MediaStream.FFmpegArg" class="form-control" placeholder="-i {input} -fflags flush_packets -max_delay 2 -hls_flags delete_segments -hls_time 2 -g 30 {output}">
+      <input type="text" asp-for="MediaStream.FFmpegArg" class="form-control" placeholder="-i {input} -fflags flush_packets -max_delay 2 -hls_flags delete_segments -hls_time 2 -g 30 {output}" disabled="@(!isAdd)">
     </div>
 
     <div class="form-check form-check-inline">
-      <input class="form-check-input" asp-for="MediaStream.Stop" type="radio" id="Stop0" value="0" checked>
+      <input class="form-check-input" asp-for="MediaStream.Stop" type="radio" id="Stop0" value="0" checked disabled="@(!isAdd)">
       <label class="form-check-label" for="Stop0">启用</label>
     </div>
     <div class="form-check form-check-inline">
-      <input class="form-check-input" asp-for="MediaStream.Stop" type="radio" id="Stop1" value="1">
+      <input class="form-check-input" asp-for="MediaStream.Stop" type="radio" id="Stop1" value="1" disabled="@(!isAdd)">
       <label class="form-check-label" for="Stop1">停用</label>
     </div>
 
     <br />
     <br />
 
-    <button type="submit" class="btn btn-primary">保存</button>
-    <button type="button" class="btn btn-secondary">测试</button>
+    <div class="d-flex w-100 justify-content-between">
+        <div class="d-flex justify-content-start">
+            <button type="button" class="btn btn-outline-primary" id="editButton">
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 修改
+            </button>
+            <button type="submit" class="btn btn-primary d-none" id="saveButton"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保存</button>
+        </div>
+        <div class="d-flex justify-content-start">
+            <button type="button" id="viewVideoButton" 
+                    data-bs-toggle="collapse" 
+                    data-bs-target="#videoTest" 
+                    class="btn btn-outline-primary @(canPreviewVideo==false?"d-none":"")" 
+                    aria-expanded="false" 
+                    aria-controls="videoTest">
+                <i class="fa fa-video-camera" aria-hidden="true"></i> 查看
+            </button>
+            <button type="button" id="undoButton" class="btn btn-outline-primary d-none">
+                <i class="fa fa-undo" aria-hidden="true"></i> 取消
+            </button>
+        </div>
+    </div>
+
+    <div class="collapse" id="videoTest">
+        <br />
+        <div class="card card-body">
+            <video  id="video1"
+                    style="width:100%;height:auto"
+                    muted
+                    controls="controls" autoplay="autoplay"
+                    x-webkit-airplay="true" x5-video-player-fullscreen="true"
+                    preload="auto" playsinline="true" webkit-playsinline
+                    x5-video-player-typ="h5">
+
+            </video>    
+        </div>
+    </div>
+
 </form>
+
+<script>
+
+    function addVideoSrc(videoSrc)
+    {
+        var video = document.getElementById("video1");
+        //
+        // First check for native browser HLS support
+        //
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+        //
+        // If no native HLS support, check if HLS.js is supported
+        //
+        } else if (Hls.isSupported()) {
+            var hls = new Hls();
+            video.muted = true;
+            //video.autoplay = false;
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+        }
+    };
+    function clearVideoSrc()
+    {
+        var video = document.getElementById("video1");
+        video.src = "";
+    };
+
+    var videoCollapsible = document.getElementById('videoTest');
+    videoCollapsible.addEventListener('show.bs.collapse', function () {
+      // do something...
+      //alert('show.bs.collapse');
+
+        if (document.getElementById('MediaStream_StreamId').value === "") {
+            alert('您需要保存再查看视频！');
+            return;
+        }
+        const mediaStreamData = 
+        { 
+            StreamId: document.getElementById('MediaStream_StreamId').value, 
+            StreamType: 'RTPS',
+            StreamURL:document.getElementById('MediaStream_StreamURL').value,
+            Stop:0,
+            CreateDateTime:0,
+            FFmpegArg:document.getElementById('MediaStream_FFmpegArg').value,
+            Title:document.getElementById('MediaStream_Title').value,
+        };
+
+        const request = new Request('/Media/Run', {
+            method: 'POST',
+            body: JSON.stringify(mediaStreamData),
+            headers: {
+            'Content-Type': 'application/json'
+            }
+        });
+        fetch(request).then((response) => {
+            return response.json();
+        }).then((data) => {
+            let fileData = data;
+            addVideoSrc(fileData.file);
+        });
+    });
+
+    var editButton = document.getElementById('editButton');
+    editButton.onclick = function() {
+        var inputElementList = [].slice.call(document.querySelectorAll('input.form-control,input.form-check-input'));
+        for (var i = 0, l = inputElementList.length; i < l; ++i) {
+            inputElementList[i].disabled=false;
+        };
+        editButton.classList.add("d-none");
+        document.getElementById('saveButton').classList.remove("d-none");
+        document.getElementById('undoButton').classList.remove("d-none");
+        document.getElementById('viewVideoButton').classList.add("d-none");
+
+        var videoTest = document.getElementById('videoTest');
+        var bsCollapse = new bootstrap.Collapse(videoTest, {
+          toggle: false
+        });
+        bsCollapse.hide();
+
+        clearVideoSrc();
+
+    };
+
+    var undoButton = document.getElementById('undoButton');
+    undoButton.onclick = function() {
+        window.location.reload();
+    };
+
+</script>

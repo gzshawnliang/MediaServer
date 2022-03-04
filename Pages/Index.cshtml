@@ -79,12 +79,12 @@
                 if(hlsDict.hasOwnProperty("item")){
                     hlsDict[item].destroy();
                 }
-                
-                sleep(1000);
+                sleep(500);
                 addVideoSrc(video,videoSrc);
         };
         
         //todo:播放错误处理，hls不可用时候重新刷新
+        //https://github.com/video-dev/hls.js/blob/master/docs/API.md#fifth-step-error-handling
         //video.addEventListener('error', function() {
         //    console.log('Failed to fetch data, but trying.');
         //});

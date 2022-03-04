@@ -7,14 +7,32 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="hls\12d2b055\**" />
+    <Content Remove="hls\12d2b055\**" />
+    <EmbeddedResource Remove="hls\12d2b055\**" />
+    <None Remove="hls\12d2b055\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="data\" />
-    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.2" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ffmpeg\ffmpeg.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ffmpeg\ffplay.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ffmpeg\ffprobe.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

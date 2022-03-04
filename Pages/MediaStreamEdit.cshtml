@@ -34,9 +34,12 @@
     <br />
 
     <div class="d-flex w-100 justify-content-between">
-        <div class="d-flex justify-content-start">
+        <div class="d-flex justify-content-start gap-1">
             <button type="button" class="btn btn-outline-primary" id="editButton">
                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 修改
+            </button>
+            <button type="button" class="btn btn-outline-danger @(isAdd?"d-none":"")" data-bs-toggle="modal" data-bs-target="#deleteModal" id="deleteButton2">
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 删除
             </button>
             <button type="submit" class="btn btn-primary d-none" id="saveButton"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保存</button>
         </div>
@@ -69,11 +72,30 @@
             </video>    
         </div>
     </div>
-
 </form>
 
-<script>
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">删除确认</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        此操作将删除视频流的配置，您不能恢复，是否继续？
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-danger" id="deleteButton">删除</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+
+<script>
+    var hls = new Hls();
     function addVideoSrc(videoSrc)
     {
         var video = document.getElementById("video1");
@@ -86,7 +108,9 @@
         // If no native HLS support, check if HLS.js is supported
         //
         } else if (Hls.isSupported()) {
-            var hls = new Hls();
+            //var hls = new Hls();
+            hls.destroy();
+            hls = new Hls();
             video.muted = true;
             //video.autoplay = false;
             hls.loadSource(videoSrc);
@@ -97,6 +121,7 @@
     {
         var video = document.getElementById("video1");
         video.src = "";
+        hls.destroy();
     };
 
     var videoCollapsible = document.getElementById('videoTest');
@@ -134,6 +159,10 @@
         });
     });
 
+    videoCollapsible.addEventListener('hidden.bs.collapse', function () {
+        clearVideoSrc();      
+    });
+
     var editButton = document.getElementById('editButton');
     editButton.onclick = function() {
         var inputElementList = [].slice.call(document.querySelectorAll('input.form-control,input.form-check-input'));
@@ -144,20 +173,49 @@
         document.getElementById('saveButton').classList.remove("d-none");
         document.getElementById('undoButton').classList.remove("d-none");
         document.getElementById('viewVideoButton').classList.add("d-none");
+        document.getElementById('deleteButton2').classList.add("d-none");
 
         var videoTest = document.getElementById('videoTest');
         var bsCollapse = new bootstrap.Collapse(videoTest, {
           toggle: false
         });
         bsCollapse.hide();
-
-        clearVideoSrc();
-
     };
 
     var undoButton = document.getElementById('undoButton');
     undoButton.onclick = function() {
         window.location.reload();
+    };
+
+    var deleteButton = document.getElementById('deleteButton');
+    deleteButton.onclick = function() {
+        //DeleteMediaStream
+        const mediaStreamData = 
+        { 
+            StreamId: document.getElementById('MediaStream_StreamId').value, 
+            StreamType: 'RTPS',
+            StreamURL:"",
+            Stop:0,
+            CreateDateTime:0,
+            FFmpegArg:"",
+            Title:"",
+        };
+        const request = new Request('/Media/DeleteMediaStream', {
+            method: 'POST',
+            body: JSON.stringify(mediaStreamData),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        fetch(request).then((response) => {
+            return response.json();
+        }).then((data) => {
+            let fileData = data;
+            if(fileData.result==="true")
+            {
+                window.location.href = "/Admin"
+            }
+        });
     };
 
 </script>

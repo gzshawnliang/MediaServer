@@ -29,11 +29,18 @@
 }
 
 
-
-
 <script>
+    function sleep(milliseconds) {
+      const date = Date.now();
+      let currentDate = null;
+      do {
+        currentDate = Date.now();
+      } while (currentDate - date < milliseconds);
+    };
 
-    function addVideoSrc(video,videoSrc)
+    var hlsDict = new Array();
+
+    function addVideoSrc(video,videoSrc,id)
     {
         //var video = document.getElementById("video1");
         //
@@ -50,6 +57,7 @@
             //video.autoplay = false;
             hls.loadSource(videoSrc);
             hls.attachMedia(video);
+            hlsDict[id]=hls;
         }
     };
 
@@ -61,14 +69,25 @@
 
     ids.forEach(function (item, index) {
       console.log(item, index);
-      var video = document.getElementById(item);
-      var videoSrc = '@Model.M3u8FileDir/'+ item + '/index.m3u8';
-      addVideoSrc(video,videoSrc);
+        var video = document.getElementById(item);
+        var videoSrc = '@Model.M3u8FileDir/'+ item + '/index.m3u8';
+        addVideoSrc(video,videoSrc,item);
 
         var refreshButton = document.getElementById('refresh-'+item);
-        refreshButton.onclick = function() {
-            addVideoSrc(video,videoSrc);
+            refreshButton.onclick = function() {
+                video.src="";
+                if(hlsDict.hasOwnProperty("item")){
+                    hlsDict[item].destroy();
+                }
+                
+                sleep(1000);
+                addVideoSrc(video,videoSrc);
         };
+        
+        //todo:播放错误处理，hls不可用时候重新刷新
+        //video.addEventListener('error', function() {
+        //    console.log('Failed to fetch data, but trying.');
+        //});
     });
 </script>
 

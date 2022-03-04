@@ -64,7 +64,7 @@ namespace MediaServer.Pages
                 sql += $"       FFmpegArg='{MediaStream.FFmpegArg}',\n";
                 sql += $"       Title='{MediaStream.Title}',\n";
                 sql += $"       CreateDateTime={DateTime.Now.ToString("yyyyMMddHHmmss")}\n";
-                sql += $"WHERE  StreamId = '{currStreamId}'";
+                sql += $"WHERE  StreamId = '{currStreamId}';";
             }
             int result = 0;
             using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))

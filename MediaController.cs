@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.Sqlite;
+using Dapper;
 
 namespace MediaServer
 {
@@ -26,23 +28,17 @@ namespace MediaServer
             return new JsonResult(new { file = "" });
         }
 
-        //todo:
-        [HttpPost("StopTest")]
-        public JsonResult StopTest(MediaStream mediaStream)
+        [HttpPost("DeleteMediaStream")]
+        public JsonResult DeleteMediaStream(MediaStream mediaStream)
         {
-            return new JsonResult(new { file = "" });
-        }
+            int result = 0;
+            using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
+                result = connection.Execute($"DELETE FROM MediaStream WHERE StreamId = '{mediaStream.StreamId}';");
 
-        [HttpGet]
-        public IEnumerable<dynamic> Get()
-        {
-            return Enumerable.Range(1, 5).Select(index => new 
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Random.Shared.Next(-20, 55)
-            })
-            .ToArray();
+            if(result > 0)
+                return new JsonResult(new { result = "true" });
+
+            return new JsonResult(new { result = "false" }); 
         }
     }
 }

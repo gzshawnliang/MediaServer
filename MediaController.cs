@@ -31,12 +31,18 @@ namespace MediaServer
         [HttpPost("DeleteMediaStream")]
         public JsonResult DeleteMediaStream(MediaStream mediaStream)
         {
+            //stop before delete
+            MediaStreamManager msm = new MediaStreamManager(_env);
+            msm.Stop(mediaStream.StreamId);
+
             int result = 0;
             using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
                 result = connection.Execute($"DELETE FROM MediaStream WHERE StreamId = '{mediaStream.StreamId}';");
 
-            if(result > 0)
+            if (result > 0)
+            {
                 return new JsonResult(new { result = "true" });
+            }
 
             return new JsonResult(new { result = "false" }); 
         }

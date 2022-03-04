@@ -90,7 +90,6 @@ namespace MediaServer
                 }
                 using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
                 {
-                    connection.Open();
                     connection.Execute($"UPDATE MediaStream SET ProcessId = NULL WHERE StreamId = '{mediaStream.StreamId}';");
                 }
             }

@@ -20,8 +20,8 @@ https://trac.ffmpeg.org/wiki/BooksAndOtherExternalResources
 HLS.js
 https://github.com/video-dev/hls.js/
 
-海康威视
-https://www.cnblogs.com/stephenzengx/p/13673981.html
+Hikvision 海康威视
+https://www.cnblogs.com/stephenzengx/p/13673981.html <br/>
 https://www.cnblogs.com/shuiche/p/12187275.html
 
 A Simple c# Wrapper for ffMpeg

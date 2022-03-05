@@ -43,7 +43,7 @@
             </button>
             <button type="submit" class="btn btn-primary @(!isAdd?"d-none":"")" id="saveButton"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保存</button>
         </div>
-        <div class="d-flex justify-content-start">
+        <div class="d-flex justify-content-start gap-1">
             <button type="button" id="viewVideoButton" 
                     data-bs-toggle="collapse" 
                     data-bs-target="#videoTest" 
@@ -52,9 +52,11 @@
                     aria-controls="videoTest">
                 <i class="fa fa-video-camera" aria-hidden="true"></i> 查看
             </button>
+            
             <button type="button" id="undoButton" class="btn btn-outline-primary d-none">
                 <i class="fa fa-undo" aria-hidden="true"></i> 取消
             </button>
+            <a role="button" href="/Admin" class="btn btn-outline-success"><i class="fa fa-chevron-left" aria-hidden="true"></i> 返回</a>
         </div>
     </div>
 

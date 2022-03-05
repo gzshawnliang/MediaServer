@@ -13,7 +13,16 @@
         <a asp-page="./MediaStreamEdit" asp-route-streamId="@mediaStream.StreamId" class="list-group-item list-group-item-action" aria-current="true">
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">
-                    <i class="fa fa-video-camera" aria-hidden="true" style="color:@(mediaStream.Stop==1?"red":"green");" ></i> 
+                    @*<i class="fa fa-video-camera" aria-hidden="true" style="color:@(mediaStream.Stop==1?"var(--bs-danger)":"var(--bs-success)");" ></i> *@
+
+                    @if(mediaStream.Stop==1)
+                    {
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true" style="color:var(--bs-danger)"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-video-camera" aria-hidden="true" style="color:var(--bs-green);"></i>
+                    }
 
                     @if(string.IsNullOrEmpty(mediaStream.Title))
                     {
@@ -24,22 +33,12 @@
                         <span>@mediaStream.Title </span>
                     }
                 </h5>
-                <span>
-                    @if(mediaStream.Stop==1)
-                    {
-                        <i class="fa fa-exclamation-circle" aria-hidden="true" style="color:red;"></i>
-                    }
-                    else
-                    {
-                        <i class="fa fa-check-circle" aria-hidden="true" style="color:green;"></i>
-                    }
-
-                </span>
+                <small>@mediaStream.StreamId </small>
             </div>
             <p class="mb-1 text-break">  @($"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}") </p>
             <div class="d-flex w-100 justify-content-between">
                 <small> ffmpeg.exe - @mediaStream.ProcessId </small>
-                <small>@mediaStream.StreamId </small>
+                
             </div>
             
         </a>        

@@ -26,7 +26,8 @@ https://trac.ffmpeg.org/wiki/BooksAndOtherExternalResources
 **VLC for Windows** <br>
 https://www.videolan.org/vlc/download-windows.html
 
-**VLC for Windows** <br>
+**EasyDarwin** <br>
+https://github.com/EasyDarwin/EasyDarwin
 
 **HLS.js** <br/>
 https://github.com/video-dev/hls.js/

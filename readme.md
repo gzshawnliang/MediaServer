@@ -46,6 +46,5 @@ https://www.sqlite.org/index.html
 **Dapper - a simple object mapper for .Net**<br/>
 https://github.com/DapperLib/Dapper
 
-
 **.NET 6.0**<br/>
 https://dotnet.microsoft.com/en-us/download/dotnet/6.0

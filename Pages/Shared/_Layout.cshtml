@@ -13,7 +13,9 @@
     <title>@ViewData["Title"] - MediaServer</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="~/lib/fontawesome-free-5.15.4-web/css/all.min.css">
+
+    @*<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">*@
     @*<link rel="stylesheet" href="~/MediaServer.styles.css" asp-append-version="true" />*@
     @*<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>*@
     <script src="~/js/hls.min.js"></script>
@@ -30,10 +32,10 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index"><i class="fas fa-home"></i> 首页</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Admin"><i class="fa fa-cog" aria-hidden="true"></i>配置</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Admin"><i class="fas fa-cog"></i> 配置</a>
                         </li>
                     </ul>
                 </div>

@@ -17,9 +17,7 @@ namespace MediaServer.Pages
         public void OnGet()
         {
             using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
-            {
                 VideoStreamList = connection.Query<MediaStream>($"SELECT * FROM MediaStream;").ToList();
-            }
         }
     }
 }

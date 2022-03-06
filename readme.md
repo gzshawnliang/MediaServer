@@ -36,6 +36,12 @@ https://github.com/EasyDarwin/EasyDarwin
 **HLS.js** <br/>
 https://github.com/video-dev/hls.js/
 
+**font-awesome 4.7**<br/>
+https://fontawesome.com/v4/icons/
+
+**Bootstrap 5**<br/>
+https://getbootstrap.com/docs/5.0/getting-started/introduction/
+
 **Hikvision 海康威视** <br/> 
 https://www.cnblogs.com/stephenzengx/p/13673981.html <br/>
 https://www.cnblogs.com/shuiche/p/12187275.html<br/>
@@ -53,6 +59,7 @@ https://github.com/DapperLib/Dapper
 **.NET 6.0**<br/>
 https://visualstudio.microsoft.com/zh-hans/vs/ <br/>
 https://dotnet.microsoft.com/en-us/download/dotnet/6.0
+
 
 **Other tools**<br/>
 

@@ -47,8 +47,10 @@ namespace MediaServer.Pages
             ;
             string sql = string.Empty;
             string currStreamId = MediaStream.StreamId;
+            bool isNew = false;
             if (string.IsNullOrEmpty(currStreamId))
             {
+                isNew = true;
                 currStreamId = Guid.NewGuid().ToString().Split("-").First();
                 sql += $"INSERT INTO MediaStream (StreamId, StreamType, StreamURL, Stop, CreateDateTime, FFmpegArg, Title, ProcessId)";
                 sql += $"VALUES ('{currStreamId}', 'RTPS', '{MediaStream.StreamURL}', {MediaStream.Stop}, {DateTime.Now.ToString("yyyyMMddHHmmss")},";
@@ -57,6 +59,7 @@ namespace MediaServer.Pages
             }
             else
             {
+                isNew = false;
                 sql += $"UPDATE MediaStream \n";
                 sql += $"SET";
                 sql += $"       StreamURL='{MediaStream.StreamURL}',\n";
@@ -82,7 +85,10 @@ namespace MediaServer.Pages
                 {
                     mediaStreamManager.Stop(currStreamId);
                 }
-                return Page();
+                if(isNew)
+                    return Redirect("Admin");
+                else
+                    return Page();
                 //return Redirect("Admin");
             }
 

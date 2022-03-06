@@ -8,20 +8,23 @@
 <div class="list-group">
     @foreach(MediaStream mediaStream in Model.VideoStreamList)
     {
-        Uri uri = new Uri(mediaStream.StreamURL);
+        Uri uri=null;
+        try
+        {
+            uri = new Uri(mediaStream.StreamURL);
+        }
+        catch{};
 
         <a asp-page="./MediaStreamEdit" asp-route-streamId="@mediaStream.StreamId" class="list-group-item list-group-item-action" aria-current="true">
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">
-                    @*<i class="fa fa-video-camera" aria-hidden="true" style="color:@(mediaStream.Stop==1?"var(--bs-danger)":"var(--bs-success)");" ></i> *@
-
-                    @if(mediaStream.Stop==1)
+                    @if(mediaStream.Stop==1 || uri ==null)
                     {
-                        <i class="fa fa-exclamation-triangle" aria-hidden="true" style="color:var(--bs-danger)"></i>
+                        <i class="fas fa-video-slash" style="color:var(--bs-danger)"></i>
                     }
                     else
                     {
-                        <i class="fa fa-video-camera" aria-hidden="true" style="color:var(--bs-green);"></i>
+                        <i class="fas fa-video" style="color:var(--bs-green);"></i>
                     }
 
                     @if(string.IsNullOrEmpty(mediaStream.Title))
@@ -35,10 +38,17 @@
                 </h5>
                 <small>@mediaStream.StreamId </small>
             </div>
-            <p class="mb-1 text-break">  @($"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}") </p>
+            @if(uri !=null)
+            {
+                <p class="mb-1 text-break">  @($"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}") </p>
+            }
+            else 
+            {
+                <p class="mb-1 text-break">  </p>
+            }
+            
             <div class="d-flex w-100 justify-content-between">
                 <small> ffmpeg.exe - @mediaStream.ProcessId </small>
-                
             </div>
             
         </a>        
@@ -48,6 +58,6 @@
 <br/>
 <div class="d-grid gap-2">
     <a asp-page="./MediaStreamEdit" class="btn btn-primary btn-lg">
-        <i class="fa fa-plus-circle" aria-hidden="true"></i> 增加
+        <i class="fas fa-plus-circle"></i> 增加
     </a>
 </div>

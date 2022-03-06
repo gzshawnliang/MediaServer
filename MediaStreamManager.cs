@@ -125,16 +125,23 @@ namespace MediaServer
 
             if (processId > 0)
             {
-                using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
-                {
-                    connection.Open();
-                    connection.Execute($"UPDATE MediaStream SET ProcessId ={processId} WHERE StreamId = '{mediaStream.StreamId}';");
-                }
+                DateTime beginTime = DateTime.Now;
                 while (!System.IO.File.Exists(m3u8File))
                 {
                     Thread.Sleep(100);
+                    if (DateTime.Now - beginTime > TimeSpan.FromSeconds(5))        //超时启动失败
+                    {
+                        using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
+                            connection.Execute($"UPDATE MediaStream SET ProcessId = 0 AND Stop = 0 WHERE StreamId = '{mediaStream.StreamId}';");
+
+                        return false;
+                    }
+
                     continue;
                 }
+                using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
+                    connection.Execute($"UPDATE MediaStream SET ProcessId ={processId} WHERE StreamId = '{mediaStream.StreamId}';");
+
                 return true;
             }
             return false;

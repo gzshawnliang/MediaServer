@@ -21,9 +21,8 @@ namespace MediaServer.Pages
         {
             List<dynamic> videoStreamList;
             using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
-            {
-                videoStreamList = connection.Query<dynamic>($"SELECT StreamId,Title FROM MediaStream WHERE Stop=0;").ToList();
-            }
+                videoStreamList = connection.Query<dynamic>($"SELECT StreamId,Title FROM MediaStream WHERE Stop=0 AND StreamURL IS NOT NULL AND FFmpegArg IS NOT NULL AND ProcessId > 0;").ToList();
+
             VideoStreamList = new List<Tuple<string, string>>();
             foreach (var videoStream in videoStreamList)
             {

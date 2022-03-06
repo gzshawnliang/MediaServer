@@ -19,8 +19,6 @@ namespace MediaServer
         public JsonResult Run(MediaStream mediaStream)
         {
             MediaStreamManager msm=new MediaStreamManager(_env);
-            //if(string.IsNullOrEmpty(mediaStream.StreamId))
-            //    mediaStream.StreamId = Guid.NewGuid().ToString().Split("-").First();
             if (msm.IsRuning(mediaStream.StreamId) || msm.Start(mediaStream.StreamId))
                 return new JsonResult(new { 
                     file = $"{Global.M3u8FileDir}/{mediaStream.StreamId}/index.m3u8" });

@@ -129,7 +129,7 @@ namespace MediaServer
                 while (!System.IO.File.Exists(m3u8File))
                 {
                     Thread.Sleep(100);
-                    if (DateTime.Now - beginTime > TimeSpan.FromSeconds(5))        //超时启动失败
+                    if (DateTime.Now - beginTime > TimeSpan.FromSeconds(10))        //超时启动失败
                     {
                         using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
                             connection.Execute($"UPDATE MediaStream SET ProcessId = NULL,Stop = 1 WHERE StreamId = '{mediaStream.StreamId}';");

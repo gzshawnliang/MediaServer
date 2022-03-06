@@ -4,6 +4,11 @@
     bool isAdd = string.IsNullOrEmpty(this.Model.MediaStream.StreamId);
     bool canPreviewVideo = !isAdd && this.Model.MediaStream.Stop==0;
 }
+
+<div class="alert alert-success text-center @(Model.IsPostSuccess?"":"d-none")" role="alert">
+  <i class="fas fa-info-circle"></i> 保存成功！ 
+</div>
+
 <form method="POST">
     <input asp-for="MediaStream.StreamId"  type="hidden"/>
 

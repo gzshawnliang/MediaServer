@@ -10,6 +10,9 @@ namespace MediaServer.Pages
         [BindProperty]
         public MediaStream MediaStream { get; set; }
 
+        [BindProperty]
+        public bool IsPostSuccess { get; set; }
+
         private readonly ILogger<IndexModel> _logger;
         private readonly IWebHostEnvironment _env;
 
@@ -84,10 +87,16 @@ namespace MediaServer.Pages
                 {
                     mediaStreamManager.Stop(currStreamId);
                 }
-                if(isNew)
+
+                if (isNew)
+                {
                     return Redirect("Admin");
+                }
                 else
+                {
+                    IsPostSuccess = true;
                     return Page();
+                }
                 //return Redirect("Admin");
             }
 

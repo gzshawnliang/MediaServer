@@ -14,11 +14,17 @@
 
     <div class="mb-3">
       <label for="StreamURL" class="form-label">Stream URL 地址</label>
-      <input type="text" asp-for="MediaStream.StreamURL"  class="form-control" placeholder="rtsp://admin:KTTHVE@192.168.137.239:554/h265/ch1/main/av_stream" disabled="@(!isAdd)">
+        <a href="#" onclick="return clickStreamUrl();" data-bs-toggle="tooltip" data-bs-placement="top" title="例子：rtsp://admin:KTTHVE@192.168.137.239:554/h265/ch1/main/av_stream">
+            <i class="fas fa-question-circle"></i>
+        </a>
+      <input type="text" asp-for="MediaStream.StreamURL"  class="form-control" placeholder="" disabled="@(!isAdd)">
     </div>
     <div class="mb-3">
-      <label for="FFmpegArg" class="form-label">FFmpeg 参数</label>
-      <input type="text" asp-for="MediaStream.FFmpegArg" class="form-control" placeholder="-i {input} -fflags flush_packets -max_delay 2 -hls_flags delete_segments -hls_time 2 -g 30 {output}" disabled="@(!isAdd)">
+      <label for="FFmpegArg" class="form-label">FFmpeg 参数</label> 
+        <a href="#" onclick="return clickFFmpegArg();" data-bs-toggle="tooltip" data-bs-placement="top" title="-i {input} -fflags flush_packets -max_delay 2 -hls_flags delete_segments -hls_time 2 -g 30 {output}">
+            <i class="fas fa-question-circle"></i>
+        </a>
+      <input type="text" asp-for="MediaStream.FFmpegArg" class="form-control" placeholder="" disabled="@(!isAdd)">
     </div>
 
     <div class="form-check form-check-inline">
@@ -95,6 +101,14 @@
   </div>
 </div>
 
+<script >
+    function clickStreamUrl () {
+        document.getElementById('MediaStream_StreamURL').value='rtsp://admin:KTTHVE@192.168.137.239:554/h265/ch1/main/av_stream';
+    };
+    function clickFFmpegArg () {
+        document.getElementById('MediaStream_FFmpegArg').value='-i {input} -fflags flush_packets -max_delay 2 -hls_flags delete_segments -hls_time 2 -g 30 {output}';
+    };
+</script>
 
 <script>
     var hls = new Hls();
@@ -219,5 +233,4 @@
             }
         });
     };
-
 </script>

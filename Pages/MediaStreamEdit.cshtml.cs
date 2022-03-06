@@ -71,9 +71,8 @@ namespace MediaServer.Pages
             }
             int result = 0;
             using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
-            {
                 result = connection.Execute(sql);
-            }
+
             if (result > 0)
             {
                 MediaStreamManager mediaStreamManager = new MediaStreamManager(_env);

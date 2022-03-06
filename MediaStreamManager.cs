@@ -90,7 +90,7 @@ namespace MediaServer
                 }
                 using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
                 {
-                    connection.Execute($"UPDATE MediaStream SET ProcessId = NULL WHERE StreamId = '{mediaStream.StreamId}';");
+                    connection.Execute($"UPDATE MediaStream SET ProcessId = NULL,Stop = 1 WHERE StreamId = '{mediaStream.StreamId}';");
                 }
             }
             return true;
@@ -132,7 +132,10 @@ namespace MediaServer
                     if (DateTime.Now - beginTime > TimeSpan.FromSeconds(5))        //超时启动失败
                     {
                         using (var connection = new SqliteConnection($"Data Source={Global.DbFileName}"))
-                            connection.Execute($"UPDATE MediaStream SET ProcessId = 0 AND Stop = 0 WHERE StreamId = '{mediaStream.StreamId}';");
+                            connection.Execute($"UPDATE MediaStream SET ProcessId = NULL,Stop = 1 WHERE StreamId = '{mediaStream.StreamId}';");
+
+                        //启动失败关闭进程
+                        ffmpeg.StopConversion(processId);
 
                         return false;
                     }

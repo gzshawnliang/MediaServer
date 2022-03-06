@@ -2,7 +2,7 @@
 
 ## System Architecture
 
-![](doc/SMSH-SYSTEM-Architecture.png)
+![](doc/SMSH-SYSTEM-Architecture.png "System Architecture")
 
 ## FFMpeg
 

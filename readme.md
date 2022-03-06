@@ -1,5 +1,9 @@
 ﻿# SMSH - a simple media server for hospital (.NET6 Veriosn)
 
+## System Architecture
+
+![](doc/SMSH-SYSTEM-Architecture.png)
+
 ## FFMpeg
 
 **Download** <br/>

@@ -51,6 +51,7 @@ https://www.sqlite.org/index.html
 https://github.com/DapperLib/Dapper
 
 **.NET 6.0**<br/>
+https://visualstudio.microsoft.com/zh-hans/vs/ <br/>
 https://dotnet.microsoft.com/en-us/download/dotnet/6.0
 
 **Other tools**<br/>
@@ -61,5 +62,5 @@ https://excalidraw.com/
 datagrip<br/>
 https://www.jetbrains.com/datagrip/
 
-vs2022<br/>
-https://visualstudio.microsoft.com/zh-hans/vs/
+
+

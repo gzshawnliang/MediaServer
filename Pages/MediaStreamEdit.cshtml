@@ -52,7 +52,10 @@
             <button type="button" class="btn btn-outline-danger @(isAdd?"d-none":"")" data-bs-toggle="modal" data-bs-target="#deleteModal" id="deleteButton2">
                 <i class="bi bi-trash"></i> 删除
             </button>
-            <button type="submit" class="btn btn-primary @(!isAdd?"d-none":"")" id="saveButton"><i class="bi bi-save"></i> 保存</button>
+            <button type="submit" class="btn btn-primary @(!isAdd?"d-none":"")" id="saveButton">
+                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                <i class="bi bi-save"></i> 保存
+            </button>
         </div>
         <div class="d-flex justify-content-start gap-1">
             <button type="button" id="viewVideoButton" 
@@ -96,7 +99,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        此操作将删除视频流的配置，您不能恢复，是否继续？
+            此操作将删除视频流的配置，您不能恢复，是否继续？
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
@@ -184,12 +187,30 @@
         clearVideoSrc();      
     });
 
+    var saveButton = document.getElementById('saveButton');
+    saveButton.onclick = function() {
+        document.getElementById('saveButton').classList.remove("d-none");
+
+        const collection = document.getElementsByClassName("spinner-border");
+        for (let i = 0; i < collection.length; i++) {
+          collection[i].classList.remove("d-none");
+        }
+        saveButton.classList.add("disabled");
+
+    };
+
     var editButton = document.getElementById('editButton');
     editButton.onclick = function() {
         var inputElementList = [].slice.call(document.querySelectorAll('input.form-control,input.form-check-input'));
         for (var i = 0, l = inputElementList.length; i < l; ++i) {
             inputElementList[i].disabled=false;
         };
+
+        const collection = document.getElementsByClassName("alert");
+        for (let i = 0; i < collection.length; i++) {
+          collection[i].classList.add("d-none");
+        }
+
         editButton.classList.add("d-none");
         document.getElementById('saveButton').classList.remove("d-none");
         document.getElementById('undoButton').classList.remove("d-none");

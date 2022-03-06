@@ -20,11 +20,11 @@
                 <h5 class="mb-1">
                     @if(mediaStream.Stop==1 || uri ==null)
                     {
-                        <i class="fas fa-video-slash" style="color:var(--bs-danger)"></i>
+                        <i class="bi bi-camera-video-off" style="color:var(--bs-danger)"></i>
                     }
                     else
                     {
-                        <i class="fas fa-video" style="color:var(--bs-green);"></i>
+                        <i class="bi bi-camera-video-fill" style="color:var(--bs-green)"></i>
                     }
 
                     @if(string.IsNullOrEmpty(mediaStream.Title))
@@ -58,6 +58,6 @@
 <br/>
 <div class="d-grid gap-2">
     <a asp-page="./MediaStreamEdit" class="btn btn-primary btn-lg">
-        <i class="fas fa-plus-circle"></i> 增加
+        <i class="bi bi-plus-circle-fill"></i> 增加
     </a>
 </div>

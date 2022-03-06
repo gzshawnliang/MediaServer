@@ -53,7 +53,7 @@ https://github.com/DapperLib/Dapper
 **.NET 6.0**<br/>
 https://dotnet.microsoft.com/en-us/download/dotnet/6.0
 
-**.Other tools**<br/>
+**Other tools**<br/>
 
 excalidraw<br/>
 https://excalidraw.com/

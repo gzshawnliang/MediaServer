@@ -5,7 +5,9 @@
 ![](doc/SMSH-Network-Architecture.png "Network Architecture")
 ![](doc/SMSH-SYSTEM-Architecture.png "System Architecture")
 
-## FFMpeg
+# Reference
+
+### FFMpeg
 
 **Download** <br/>
 https://www.ffmpeg.org/download.html <br/>
@@ -70,5 +72,7 @@ https://excalidraw.com/
 datagrip<br/>
 https://www.jetbrains.com/datagrip/
 
+Firefox Browser Developer Edition<br/>
+https://www.mozilla.org/en-GB/firefox/developer/
 
 

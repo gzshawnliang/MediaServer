@@ -39,11 +39,11 @@ https://github.com/EasyDarwin/EasyDarwin
 **HLS.js** <br/>
 https://github.com/video-dev/hls.js/
 
-**font-awesome 4.7**<br/>
-https://fontawesome.com/v4/icons/
-
 **Bootstrap 5**<br/>
 https://getbootstrap.com/docs/5.0/getting-started/introduction/
+
+**Bootstrap Icons**<br/>
+https://icons.getbootstrap.com/
 
 **Hikvision 海康威视** <br/> 
 https://www.cnblogs.com/stephenzengx/p/13673981.html <br/>

@@ -5,7 +5,7 @@
 ![](doc/SMSH-Network-Architecture.png "Network Architecture")
 ![](doc/SMSH-SYSTEM-Architecture.png "System Architecture")
 
-# Reference
+# Technology Stack
 
 ### FFMpeg
 

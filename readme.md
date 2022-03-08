@@ -16,16 +16,19 @@ https://www.ffmpeg.org/download.html <br/>
 http://www.vsubhash.in/ffmpeg-quick-hacks-book.html <br/>
 
 **push rtsp sample**<br/>
+```
 ffmpeg -re -stream_loop -1 -i test.mp4 -vcodec h264 -acodec aac -f rtsp -rtsp_transport tcp rtsp://200.200.200.140:554/test1 <br/>
 ffmpeg -re -stream_loop -1 -i appletv.mp4 -vcodec h264 -acodec aac -f rtsp -rtsp_transport tcp rtsp://200.200.200.140:554/test2 <br/>
 ffmpeg -re -stream_loop -1 -i Beautiful.mp4 -vcodec h264 -acodec aac -f rtsp -rtsp_transport tcp rtsp://200.200.200.140:554/test3 <br/>
 ffmpeg -re -stream_loop -1 -i NewZealand.mp4 -vcodec h264 -acodec aac -f rtsp -rtsp_transport tcp rtsp://200.200.200.140:554/test4 <br/>
-
+```
 **rtsp to hls sample** <br/>
+```
 ffmpeg.exe -i rtsp://200.200.200.140/test1 -fflags flush_packets -max_delay 2 -hls_flags delete_segments -hls_time 2 -g 30 test-1.m3u8 <br/>
 ffmpeg.exe -rtsp_transport tcp -i rtsp://200.200.200.140/test2 -fflags flush_packets -max_delay 5 -flags global_header -hls_time 5 -hls_list_size 3 -vcodec copy -y test-2.m3u8 <br/>
 ffmpeg.exe -i rtsp://200.200.200.140/test3 -fflags flush_packets -max_delay 2 -hls_flags delete_segments -hls_time 2 -g 30 test-3.m3u8 <br/>
 ffmpeg.exe -i rtsp://200.200.200.140/test4 -fflags flush_packets -max_delay 2 -hls_flags delete_segments -hls_time 2 -g 30 test-4.m3u8 <br/>
+```
 
 **Books and other External Resources** <br/>
 https://trac.ffmpeg.org/wiki/BooksAndOtherExternalResources
@@ -35,6 +38,11 @@ https://www.videolan.org/vlc/download-windows.html
 
 **EasyDarwin** <br>
 https://github.com/EasyDarwin/EasyDarwin
+
+**JavaScript**<br/>
+https://developer.mozilla.org/en-US/docs/Web/JavaScript <br/>
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript <br/>
+https://www.w3schools.com/js/ <br/>
 
 **HLS.js** <br/>
 https://github.com/video-dev/hls.js/

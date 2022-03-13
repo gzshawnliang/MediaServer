@@ -29,6 +29,14 @@ ffmpeg.exe -rtsp_transport tcp -i rtsp://200.200.200.140/test2 -fflags flush_pac
 ffmpeg.exe -i rtsp://200.200.200.140/test3 -fflags flush_packets -max_delay 2 -hls_flags delete_segments -hls_time 2 -g 30 test-3.m3u8
 ffmpeg.exe -i rtsp://200.200.200.140/test4 -fflags flush_packets -max_delay 2 -hls_flags delete_segments -hls_time 2 -g 30 test-4.m3u8
 ```
+IIS MIME Type for hls
+```
+.m3u8
+application/x-mpegurl
+
+.ts
+video/vnd.dlna.mpeg-tts
+```
 
 **Books and other External Resources** <br/>
 https://trac.ffmpeg.org/wiki/BooksAndOtherExternalResources
@@ -79,6 +87,9 @@ https://excalidraw.com/
 
 datagrip<br/>
 https://www.jetbrains.com/datagrip/
+
+SQLite and SQL Server Compact Toolbox <br/>
+https://marketplace.visualstudio.com/items?itemName=ErikEJ.SQLServerCompactSQLiteToolbox
 
 Firefox Browser Developer Edition<br/>
 https://www.mozilla.org/en-GB/firefox/developer/

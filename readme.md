@@ -1,4 +1,4 @@
-﻿# SMSH - a simple media server for hospital (.NET6 Veriosn)
+﻿# SMSH - a simple media server for hospital (.NET6 MVC Veriosn)
 
 ## System Architecture
 
